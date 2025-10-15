@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little X and Heart Quests - Book 7</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #8a2be2 50%, #4169E1 100%);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes float-up {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        @keyframes guest-pop {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            text-shadow: 0 0 20px #ff6b9d;
+            animation: glow 2s ease-in-out infinite alternate;
+            margin-bottom: 10px;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #ff6b9d; }
+            to { text-shadow: 0 0 30px #ff6b9d, 0 0 40px #ffffff; }
+        }
+        .chapter {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #ff6b9d;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+        .chapter h2 {
+            color: #ff6b9d;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .heart-icon {
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        .chalkboard-container {
+            background: rgba(255, 107, 157, 0.2);
+            border: 3px dashed #ff6b9d;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+            position: relative;
+        }
+        .emotion-card {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b9d, #8a2be2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            min-width: 120px;
+        }
+        .emotion-card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.8);
+        }
+        .emotion-card.selected {
+            border-color: #00ff00;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff6b9d, #8a2be2);
+            border: none;
+            color: #fff;
+            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
+        }
+        .controls, .instruments {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .story-text {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .character-speech {
+            background: rgba(255, 107, 157, 0.1);
+            border-left: 4px solid #ff6b9d;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .guest-chat {
+            background: rgba(138, 43, 226, 0.1);
+            border-left: 4px solid #8a2be2;
+            animation: guest-pop 1s ease-out;
+        }
+        .leadership-scenario {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(138, 43, 226, 0.3));
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ff6b9d;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .choice-btn {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #8a2be2;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .choice-btn:hover {
+            background: rgba(138, 43, 226, 0.3);
+            transform: translateX(10px);
+        }
+        .nav-buttons {
+            text-align: center;
+            margin: 30px 0;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .chapter { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div id="stars-container"></div>
+    
+    <div class="container">
+        <h1>❤️ Little X and Heart Quests ❤️</h1>
+        <p style="text-align: center; font-size: 1.2em; color: #ff6b9d;">Book 7 of the Little X Adventures - The Grand Finale!</p>
+        
+        <div class="chapter">
+            <h2><span class="heart-icon">💖</span> Chapter 1: The Emotion Explorer!</h2>
+            
+            <div class="story-text">
+                <p>After navigating the stars in Book 6, Little X returned to the workshop—but something felt different. The cosmic chalkboard now glowed with warm, pulsing light, like a giant heartbeat.</p>
+                
+                <div class="character-speech">
+                    <strong>Heart Healer ARIA:</strong> "Welcome to your final and most important quest, Little X! You've learned about nature, science, coding, justice, and the cosmos. But there's one universe you haven't fully explored yet—the universe INSIDE you! Your heart, your feelings, your ability to understand yourself AND others. This is EMOTIONAL INTELLIGENCE!"
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Little X:</strong> "Emotions? Like when I'm happy or sad?"
+                </div>
+                
+                <p>Raaarrr stomped over, looking frustrated. His scales were flickering red and orange—not his usual rainbow colors.</p>
+                
+                <div class="character-speech">
+                    <strong>Raaarrr:</strong> "Raaarrr-GRUMPY! My code didn't work! I feel... I feel... I don't even know WHAT I feel! It's all mixed up inside like a meteor smoothie!"
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Wise Hooty:</strong> "Hoot-wisdom! That's EXACTLY why we need this lesson! Feelings aren't weaknesses—they're SUPERPOWERS! But only if you understand them. Can you identify what Raaarrr is feeling right now, Little X?"
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Uncle Harold:</strong> "I've traveled across galaxies and coded a thousand inventions, but the hardest thing I ever learned was understanding my own heart. Let me teach you what took me years to discover."
+                </div>
+            </div>
+            
+            <div class="chalkboard-container">
+                <h3>💭 Emotion Detective Challenge!</h3>
+                <p>Look at the scenario and identify the emotion! Click the feeling you think matches!</p>
+                
+                <div id="emotion-scenario" style="background: rgba(138, 43, 226, 0.3); padding: 20px; border-radius: 10px; margin: 20px 0; font-size: 18px; min-height: 100px;">
+                    Click "New Scenario" to begin the Emotion Detective game!
+                </div>
+                
+                <div id="emotion-choices" style="margin: 20px 0;">
+                    <div class="emotion-card" onclick="selectEmotion('happy')">
+                        <div style="font-size: 40px;">😊</div>
+                        <div>Happy</div>
+                    </div>
+                    <div class="emotion-card" onclick="selectEmotion('sad')">
+                        <div style="font-size: 40px;">😢</div>
+                        <div>Sad</div>
+                    </div>
+                    <div class="emotion-card" onclick="selectEmotion('angry')">
+                        <div style="font-size: 40px;">😠</div>
+                        <div>Angry</div>
+                    </div>
+                    <div class="emotion-card" onclick="selectEmotion('scared')">
+                        <div style="font-size: 40px;">😰</div>
+                        <div>Scared</div>
+                    </div>
+                    <div class="emotion-card" onclick="selectEmotion('excited')">
+                        <div style="font-size: 40px;">🤩</div>
+                        <div>Excited</div>
+                    </div>
+                    <div class="emotion-card" onclick="selectEmotion('frustrated')">
+                        <div style="font-size: 40px;">😤</div>
+                        <div>Frustrated</div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn" onclick="newEmotionScenario()" style="font-size: 18px; padding: 15px 30px;">🎭 New Scenario</button>
+                </div>
+                
+                <div id="emotion-result" style="margin-top: 15px; padding: 15px; background: rgba(0, 0, 0, 0.5); border-radius: 10px; min-height: 50px; color: #00ff00; font-weight: bold;"></div>
+                
+                <div id="emotion-score" style="margin-top: 10px; font-size: 20px; color: #ff6b9d;">
+                    Emotions Identified: 0/5
+                </div>
+            </div>
+            
+            <div class="story-text">
+                <p>As Little X practiced identifying emotions, Raaarrr's scales gradually shifted from angry red to calm blue.</p>
+                
+                <div class="character-speech">
+                    <strong>Raaarrr:</strong> "I get it now! I wasn't just 'grumpy'—I was FRUSTRATED because my code didn't work, and maybe a little SAD because I wanted to do well. Naming feelings helps!"
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Heart Healer ARIA:</strong> "EXACTLY! Once you NAME an emotion, you can UNDERSTAND it. Once you understand it, you can MANAGE it. That's emotional intelligence! But there's more—you also need to understand OTHER people's feelings. That's called EMPATHY!"
+                </div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn" onclick="loadChapter(2)" style="font-size: 18px; padding: 15px 30px;">
+                    💫 Continue to Chapter 2: The Leadership Quest! →
+                </button>
+            </div>
+        </div>
+        
+        <div class="chapter" id="chapter2" style="display: none;">
+            <h2><span class="heart-icon">💖</span> Chapter 2: The Leadership Quest!</h2>
+            
+            <div class="story-text">
+                <p>The workshop transformed into a miniature village with tiny holographic citizens—each one facing different problems and looking to Little X for guidance!</p>
+                
+                <div class="character-speech">
+                    <strong>Wise Hooty:</strong> "Hoot-leadership! Being a leader isn't about being the LOUDEST or the BOSSIEST. It's about making wise decisions that help EVERYONE, especially when the choice is hard. Real leaders use their hearts AND their minds together!"
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Heart Healer ARIA:</strong> "You've learned science, justice, and navigation. Now combine everything with EMOTIONAL INTELLIGENCE to become a true leader! Each decision affects not just you, but your whole community—just like the web of life from Book 3!"
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Raaarrr:</strong> "Raaarrr-nervous! What if I make the wrong choice? My tail is wiggling with worry!"
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Uncle Harold:</strong> "That worry shows you CARE, Raaarrr. That's the first sign of a good leader. Now let's practice making choices that balance everyone's needs."
+                </div>
+            </div>
+            
+            <div class="chalkboard-container">
+                <h3>👥 Leadership Decision Challenge!</h3>
+                <p>Face real leadership scenarios! Choose wisely—your decisions affect everyone!</p>
+                
+                <div id="leadership-scenario-display"></div>
+                
+                <div class="controls">
+                    <button class="btn" onclick="startLeadershipQuest()" style="font-size: 18px; padding: 15px 30px;">
+                        🌟 Start Leadership Quest!
+                    </button>
+                </div>
+                
+                <div id="leadership-result" style="margin-top: 15px; padding: 15px; background: rgba(0, 0, 0, 0.5); border-radius: 10px; min-height: 80px; color: #00ff00; font-weight: bold;"></div>
+                
+                <div id="leadership-score" style="margin-top: 10px; font-size: 20px; color: #ff6b9d;">
+                    Leadership Wisdom: 0/3
+                </div>
+            </div>
+            
+            <div class="story-text">
+                <p>As Little X made each leadership decision, the holographic village responded—some citizens cheered, others needed more help, and everyone learned together.</p>
+                
+                <div class="character-speech">
+                    <strong>Wise Hooty:</strong> "Hoot-magnificent! You're learning that leadership means LISTENING to everyone, THINKING about consequences, and CHOOSING with both logic AND compassion. Sometimes there's no perfect answer—just the best answer you can find with a caring heart."
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Raaarrr:</strong> "Raaarrr! I made some mistakes, but I learned from them! That's okay, right?"
+                </div>
+                
+                <div class="character-speech">
+                    <strong>Heart Healer ARIA:</strong> "MORE than okay—that's ESSENTIAL! The best leaders admit mistakes, learn, and grow. You've shown courage, wisdom, and heart. You're ready for the final lesson..."
+                </div>
+                
+                <div class="character-speech guest-chat">
+                    <strong>Keanu (appearing in warm golden light):</strong> "Little X, you've journeyed from a curious beginner to a wise cosmic citizen. You've learned to create, to protect nature, to code solutions, to uphold justice, to navigate stars, and now—most importantly—to lead with heart. The greatest power isn't in rockets or code or even stars. It's in your ability to understand yourself, care for others, and make the world better."
+                </div>
+                
+                <p>All the friends Little X had met—ARIA, Raaarrr, Uncle Harold, Socrates, Keanu—gathered together. The workshop glowed with every color of the rainbow.</p>
+                
+                <div class="character-speech">
+                    <strong>Uncle Harold:</strong> "Little X, you came to my workshop as a curious child. You're leaving as a compassionate leader ready to face any adventure. Use your knowledge wisely. Use your heart even more wisely."
+                </div>
+                
+                <div style="background: linear-gradient(135deg, rgba(255, 107, 157, 0.3), rgba(138, 43, 226, 0.3), rgba(0, 255, 255, 0.3)); padding: 30px; border-radius: 15px; margin: 30px 0; text-align: center; border: 3px solid #ff6b9d;">
+                    <h3 style="color: #ff6b9d; margin-top: 0; font-size: 24px;">🌟 YOUR JOURNEY IS COMPLETE! 🌟</h3>
+                    <p style="font-size: 18px; margin: 20px 0;">Across 7 incredible books, you've mastered:</p>
+                    <div style="text-align: left; display: inline-block; font-size: 16px;">
+                        <p>📚 <strong>Book 1:</strong> Foundations & Friendship</p>
+                        <p>🎨 <strong>Book 2:</strong> Creative Building & Music</p>
+                        <p>🌍 <strong>Book 3:</strong> Web of Life & Environmental Science</p>
+                        <p>💻 <strong>Book 4:</strong> Cosmic Codes & Programming Logic</p>
+                        <p>⚖️ <strong>Book 5:</strong> Justice, Law & Critical Thinking</p>
+                        <p>⭐ <strong>Book 6:</strong> Star Navigation & Astronomy</p>
+                        <p>❤️ <strong>Book 7:</strong> Emotional Intelligence & Leadership</p>
+                    </div>
+                    <p style="font-size: 20px; margin-top: 20px; color: #00ffff;">
+                        <strong>You are now a complete cosmic citizen—</strong><br>
+                        <em>Ready to explore, create, protect, solve, judge, navigate, and lead with wisdom and heart!</em>
+                    </p>
+                </div>
+                
+                <p style="text-align: center; font-size: 28px; color: #ff6b9d; text-shadow: 0 0 20px #ff6b9d; margin: 40px 0; animation: pulse 2s ease-in-out infinite;">
+                    <em>✨ The End... And The Beginning! ✨</em>
+                </p>
+                
+                <div style="background: rgba(138, 43, 226, 0.2); padding: 20px; border-radius: 15px; margin: 30px 0;">
+                    <p style="font-size: 16px; font-style: italic;">
+                        "The real adventure isn't in the workshop—it's in YOUR world, YOUR choices, YOUR heart. Go forth, Little X, and make the universe brighter with everything you've learned. The cosmos is waiting for heroes like you!" 
+                        <br>- Uncle Harold, ARIA, Raaarrr, and all your friends
+                    </p>
+                </div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn" onclick="loadChapter(1)" style="font-size: 18px; padding: 15px 30px;">
+                    🔄 Restart Book 7
+                </button>
+                <button class="btn" onclick="celebrateSeriesCompletion()" style="background: linear-gradient(45deg, #ff6b9d, #8a2be2, #00ffff, #00ff00); font-size: 20px; padding: 20px 40px; animation: pulse 2s ease-in-out infinite;">
+                    🎉 CELEBRATE THE COMPLETE JOURNEY! 🎉
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let audioContext = null;
+        function initAudio() {
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioContext.state === 'suspended') audioContext.resume();
+        }
+        function playTone(freq, dur, type = 'sine') {
+            initAudio();
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+            gain.gain.setValueAtTime(0, audioContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + dur);
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + dur);
+        }
+        
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(star);
+            }
+        }
+        
+        // EMOTION DETECTIVE GAME
+        const emotionScenarios = [
+            {
+                text: "🦖 Raaarrr's code finally worked after trying 10 times! He's jumping and roaring with joy!",
+                emotion: 'happy',
+                explanation: "When we succeed after trying hard, we feel HAPPY! Joy is the emotion of achievement!"
+            },
+            {
+                text: "🤖 Robot's best friend moved to another galaxy. Robot sits alone, missing their friend.",
+                emotion: 'sad',
+                explanation: "Missing someone we care about makes us SAD. It's okay to feel sad—it shows we love deeply!"
+            },
+            {
+                text: "🐦 Bird built a beautiful nest, but someone knocked it down on purpose. Bird's feathers are ruffled!",
+                emotion: 'angry',
+                explanation: "When something unfair happens, we feel ANGRY. Anger tells us something isn't right!"
+            },
+            {
+                text: "🦖 Raaarrr hears a strange noise in the dark cave. His tail is shaking and he won't go in!",
+                emotion: 'scared',
+                explanation: "Unknown or dangerous things make us SCARED. Fear protects us from harm!"
+            },
+            {
+                text: "⭐ ARIA just heard she's going to explore a NEW galaxy tomorrow! She can't stop spinning!",
+                emotion: 'excited',
+                explanation: "Anticipating something wonderful makes us EXCITED! It's like happy energy for the future!"
+            },
+            {
+                text: "🦖 Raaarrr tried to solve the puzzle 5 times but keeps getting stuck. He stomps and huffs.",
+                emotion: 'frustrated',
+                explanation: "When we're trying but not succeeding, we feel FRUSTRATED. It's different from angry—it's 'I WANT to do this but CAN'T!'"
+            }
+        ];
+        
+        let currentEmotionScenario = null;
+        let emotionScore = 0;
+        let emotionAttempts = 0;
+        
+        function newEmotionScenario() {
+            if (emotionAttempts >= 5) {
+                document.getElementById('emotion-result').innerHTML = `
+                    <div style="font-size: 20px;">🎉 Emotion Detective Complete!</div>
+                    <div style="margin-top: 10px;">You identified ${emotionScore}/5 emotions correctly!</div>
+                    <div style="margin-top: 10px; font-size: 14px;">
+                        ${emotionScore >= 4 ? '🌟 Excellent emotional intelligence!' : 
+                          emotionScore >= 3 ? '✨ Good work! Keep practicing!' : 
+                          '💪 Emotions are tricky—keep learning!'}
+                    </div>
+                `;
+                return;
+            }
+            
+            currentEmotionScenario = emotionScenarios[emotionAttempts];
+            document.getElementById('emotion-scenario').innerHTML = `
+                <strong>Scenario ${emotionAttempts + 1}/5:</strong><br>
+                ${currentEmotionScenario.text}
+            `;
+            document.getElementById('emotion-result').textContent = 'Choose the emotion you think matches this scenario!';
+            
+            // Reset card selections
+            document.querySelectorAll('.emotion-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            initAudio();
+            playTone(440, 0.3, 'sine');
+        }
+        
+        function selectEmotion(emotion) {
+            if (!currentEmotionScenario || emotionAttempts >= 5) {
+                document.getElementById('emotion-result').textContent = '⚠️ Click "New Scenario" to start!';
+                return;
+            }
+            
+            // Visual feedback
+            document.querySelectorAll('.emotion-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.emotion-card').classList.add('selected');
+            
+            emotionAttempts++;
+            
+            if (emotion === currentEmotionScenario.emotion) {
+                emotionScore++;
+                document.getElementById('emotion-result').innerHTML = `
+                    <div style="color: #00ff00; font-size: 20px;">✅ CORRECT!</div>
+                    <div style="margin-top: 10px; font-size: 16px;">${currentEmotionScenario.explanation}</div>
+                `;
+                
+                initAudio();
+                playTone(659, 0.3, 'sine');
+                setTimeout(() => playTone(784, 0.3, 'sine'), 150);
+            } else {
+                document.getElementById('emotion-result').innerHTML = `
+                    <div style="color: #ff6b9d; font-size: 20px;">❌ Not quite!</div>
+                    <div style="margin-top: 10px; font-size: 16px;">The correct emotion was: <strong>${currentEmotionScenario.emotion.toUpperCase()}</strong></div>
+                    <div style="margin-top: 5px; font-size: 14px;">${currentEmotionScenario.explanation}</div>
+                `;
+                
+                initAudio();
+                playTone(349, 0.4, 'square');
+            }
+            
+            document.getElementById('emotion-score').textContent = `Emotions Identified: ${emotionScore}/${emotionAttempts}`;
+            
+            if (emotionAttempts < 5) {
+                setTimeout(() => {
+                    document.getElementById('emotion-result').textContent = 'Click "New Scenario" for the next challenge!';
+                }, 3000);
+            }
+        }
+        
+        // LEADERSHIP QUEST GAME
+        const leadershipScenarios = [
+            {
+                title: "The Playground Conflict",
+                situation: "Two friends both want to play with the same toy rocket. They're starting to argue and push each other. What do you do?",
+                choices: [
+                    {
+                        text: "A) Take the rocket away from both of them until they calm down",
+                        result: "They both feel punished. A leader finds solutions, not just stops problems!",
+                        wisdom: 0
+                    },
+                    {
+                        text: "B) Suggest they take turns - 5 minutes each - and help them set a timer",
+                        result: "Both friends get to play fairly! You showed wisdom by creating a fair solution that makes everyone happy.",
+                        wisdom: 1
+                    },
+                    {
+                        text: "C) Give the rocket to whoever grabbed it first",
+                        result: "That's not fair to the other friend. Leaders think about everyone's feelings!",
+                        wisdom: 0
+                    }
+                ]
+            },
+            {
+                title: "The Team Project Problem",
+                situation: "Your team is building a space station. One member wants to do it their way, but it won't be safe. They'll feel bad if you say no. What do you do?",
+                choices: [
+                    {
+                        text: "A) Let them do it their way to avoid hurt feelings",
+                        result: "The station isn't safe! Leaders must speak up even when it's hard. Safety matters more than avoiding awkwardness.",
+                        wisdom: 0
+                    },
+                    {
+                        text: "B) Explain why safety matters, suggest a way to use PART of their idea, and work together on a safe design",
+                        result: "Perfect! You valued their feelings AND kept everyone safe. You combined their creativity with smart choices!",
+                        wisdom: 1
+                    },
+                    {
+                        text: "C) Tell them their idea is wrong and do it yourself",
+                        result: "That hurts their feelings and doesn't teach them. Leaders explain WHY and help others learn!",
+                        wisdom: 0
+                    }
+                ]
+            },
+            {
+                title: "The Resource Dilemma",
+                situation: "You have 10 cosmic gems to share among 3 friends. One friend really NEEDS 6 gems for their project, but that means the others get less. What do you do?",
+                choices: [
+                    {
+                        text: "A) Give everyone 3-3-3, with one left over for emergencies",
+                        result: "Equal but not fair! Sometimes people have different needs. One friend's project suffers.",
+                        wisdom: 0
+                    },
+                    {
+                        text: "B) Ask everyone what they NEED vs WANT, explain the situation honestly, and work together to find a fair solution",
+                        result: "Excellent leadership! By being honest and listening to everyone's needs, you found a solution that helps the most important need while being fair to all.",
+                        wisdom: 1
+                    },
+                    {
+                        text: "C) Keep 4 for yourself and split the rest",
+                        result: "Leaders put the group's needs first, not their own! This wasn't fair to anyone.",
+                        wisdom: 0
+                    }
+                ]
+            }
+        ];
+        
+        let currentLeadershipIndex = 0;
+        let leadershipWisdom = 0;
+        
+        function startLeadershipQuest() {
+            currentLeadershipIndex = 0;
+            leadershipWisdom = 0;
+            showLeadershipScenario();
+        }
+        
+        function showLeadershipScenario() {
+            if (currentLeadershipIndex >= leadershipScenarios.length) {
+                const display = document.getElementById('leadership-scenario-display');
+                display.innerHTML = `
+                    <div class="leadership-scenario">
+                        <h3 style="color: #ff6b9d;">🎉 Leadership Quest Complete! 🎉</h3>
+                        <p style="font-size: 18px; margin: 20px 0;">
+                            You earned ${leadershipWisdom}/${leadershipScenarios.length} wisdom points!
+                        </p>
+                        <p style="font-size: 16px;">
+                            ${leadershipWisdom === 3 ? '🌟 Master Leader! You make wise, compassionate decisions!' :
+                              leadershipWisdom === 2 ? '✨ Good Leader! You understand most situations well!' :
+                              leadershipWisdom === 1 ? '💪 Learning Leader! Keep practicing these skills!' :
+                              '💡 Growing Leader! Leadership takes time—you\'re on the right path!'}
+                        </p>
+                        <p style="margin-top: 20px; font-size: 14px; font-style: italic;">
+                            Remember: Great leaders listen, think about everyone, and choose with both their minds AND their hearts!
+                        </p>
+                    </div>
+                `;
+                
+                initAudio();
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => playTone(523 + i * 100, 0.2, 'sine'), i * 150);
+                }
+                return;
+            }
+            
+            const scenario = leadershipScenarios[currentLeadershipIndex];
+            const display = document.getElementById('leadership-scenario-display');
+            
+            display.innerHTML = `
+                <div class="leadership-scenario">
+                    <h3 style="color: #ff6b9d; margin-top: 0;">Scenario ${currentLeadershipIndex + 1}: ${scenario.title}</h3>
+                    <p style="font-size: 18px; margin: 15px 0;"><strong>${scenario.situation}</strong></p>
+                    ${scenario.choices.map((choice, i) => 
+                        `<button class="choice-btn" onclick="makeLeadershipChoice(${i})">${choice.text}</button>`
+                    ).join('')}
+                </div>
+            `;
+            
+            document.getElementById('leadership-result').textContent = 'Choose wisely! Think about everyone affected by your decision.';
+            
+            initAudio();
+            playTone(440, 0.3, 'sine');
+        }
+        
+        function makeLeadershipChoice(choiceIndex) {
+            const scenario = leadershipScenarios[currentLeadershipIndex];
+            const choice = scenario.choices[choiceIndex];
+            
+            if (choice.wisdom === 1) {
+                leadershipWisdom++;
+            }
+            
+            document.getElementById('leadership-result').innerHTML = `
+                <div style="font-size: 18px; color: ${choice.wisdom ? '#00ff00' : '#ff6b9d'};">
+                    ${choice.wisdom ? '✅ Wise Choice!' : '❌ Not the best choice...'}
+                </div>
+                <div style="margin-top: 10px; font-size: 16px;">
+                    ${choice.result}
+                </div>
+            `;
+            
+            document.getElementById('leadership-score').textContent = `Leadership Wisdom: ${leadershipWisdom}/${currentLeadershipIndex + 1}`;
+            
+            initAudio();
+            if (choice.wisdom) {
+                playTone(659, 0.3, 'sine');
+                setTimeout(() => playTone(784, 0.3, 'sine'), 150);
+            } else {
+                playTone(349, 0.4, 'square');
+            }
+            
+            currentLeadershipIndex++;
+            
+            if (currentLeadershipIndex < leadershipScenarios.length) {
+                setTimeout(() => {
+                    document.getElementById('leadership-result').textContent = 'Ready for the next leadership challenge?';
+                    setTimeout(showLeadershipScenario, 1000);
+                }, 3000);
+            } else {
+                setTimeout(showLeadershipScenario, 3000);
+            }
+        }
+        
+        function loadChapter(num) {
+            document.querySelectorAll('.chapter').forEach(ch => ch.style.display = 'none');
+            const target = num === 1 ? document.querySelector('.chapter') : document.getElementById('chapter' + num);
+            if (target) {
+                target.style.display = 'block';
+                window.scrollTo(0, 0);
+            }
+            
+            if (num === 1) {
+                emotionScore = 0;
+                emotionAttempts = 0;
+                document.getElementById('emotion-score').textContent = 'Emotions Identified: 0/5';
+                document.getElementById('emotion-result').textContent = 'Click "New Scenario" to begin!';
+            }
+        }
+        
+        function celebrateSeriesCompletion() {
+            initAudio();
+            
+            // EPIC FINALE CELEBRATION!
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    playTone(400 + Math.random() * 600, 0.2, ['sine', 'triangle', 'square'][Math.floor(Math.random() * 3)]);
+                    
+                    const emojis = ['❤️', '💖', '🌟', '⭐', '✨', '💫', '🎉', '🚀', '🌍', '💻', '⚖️', '🪐'];
+                    const fw = document.createElement('div');
+                    fw.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    fw.style.cssText = `
+                        position: fixed; 
+                        left: ${Math.random() * window.innerWidth}px; 
+                        top: ${Math.random() * window.innerHeight}px; 
+                        font-size: ${50 + Math.random() * 50}px; 
+                        animation: float-up 3s ease-out forwards; 
+                        pointer-events: none; 
+                        z-index: 9999;
+                        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+                    `;
+                    document.body.appendChild(fw);
+                    setTimeout(() => fw.remove(), 3000);
+                }, i * 100);
+            }
+            
+            setTimeout(() => {
+                alert(`🎉💖🌟 THE COMPLETE LITTLE X JOURNEY! 🌟💖🎉
+
+═══════════════════════════════════
+
+YOU DID IT! ALL 7 BOOKS COMPLETE!
+
+📚 Book 1: Foundations & Friendship
+🎨 Book 2: Creative Building & Music
+🌍 Book 3: Web of Life & Science
+💻 Book 4: Cosmic Codes & Programming
+⚖️ Book 5: Justice & Critical Thinking
+⭐ Book 6: Star Navigation & Astronomy
+❤️ Book 7: Emotional Intelligence & Leadership
+
+═══════════════════════════════════
+
+YOU'VE BECOME:
+✨ A Creative Builder
+🌱 An Environmental Guardian
+💡 A Coding Wizard
+⚖️ A Justice Seeker
+🌟 A Star Navigator
+❤️ A Compassionate Leader
+
+═══════════════════════════════════
+
+The workshop was just the beginning.
+Now YOUR world is the adventure!
+
+Use your knowledge wisely.
+Use your heart even more wisely.
+Make the universe brighter.
+
+The cosmos believes in you! 🚀
+
+- Uncle Harold, ARIA, Raaarrr,
+  Socrates, Keanu, and all your friends
+
+═══════════════════════════════════`);
+            }, 5000);
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            createStars();
+        });
+    </script>
+</body>
+</html>
